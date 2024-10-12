@@ -1,130 +1,116 @@
-#include <iostream>
-#include <vector>
-#include <string>
+class Book:
+    def __init__(self, id, title, author, genre, published_year):
+        self.id = id
+        self.title = title
+        self.author = author
+        self.genre = genre
+        self.published_year = published_year
 
-using namespace std;
+    def get_id(self):
+        return self.id
 
-class Book {
-private:
-    int id;
-    string title;
-    string author;
-    string genre;
-    int publishedYear;
+    def get_title(self):
+        return self.title
 
-public:
-    Book(int id, string title, string author, string genre, int publishedYear) 
-        : id(id), title(title), author(author), genre(genre), publishedYear(publishedYear) {}
+    def get_author(self):
+        return self.author
 
-    int getId() const { return id; }
-    string getTitle() const { return title; }
-    string getAuthor() const { return author; }
-    string getGenre() const { return genre; }
-    int getPublishedYear() const { return publishedYear; }
+    def get_genre(self):
+        return self.genre
 
-    void setTitle(const string& newTitle) { title = newTitle; }
-    void setAuthor(const string& newAuthor) { author = newAuthor; }
-    void setGenre(const string& newGenre) { genre = newGenre; }
-    void setPublishedYear(int newYear) { publishedYear = newYear; }
+    def get_published_year(self):
+        return self.published_year
 
-    void display() const {
-        cout << "ID: " << id << ", Title: " << title << ", Author: " << author 
-             << ", Genre: " << genre << ", Published Year: " << publishedYear << endl;
-    }
-};
+    def set_title(self, new_title):
+        self.title = new_title
 
-class BookInventory {
-private:
-    vector<Book> books;
-    int nextId;
+    def set_author(self, new_author):
+        self.author = new_author
 
-public:
-    BookInventory() : nextId(1) {}
+    def set_genre(self, new_genre):
+        self.genre = new_genre
 
-    void addBook(const string& title, const string& author, const string& genre, int publishedYear) {
-        books.push_back(Book(nextId++, title, author, genre, publishedYear));
-    }
+    def set_published_year(self, new_year):
+        self.published_year = new_year
 
-    void updateBook(int id, const string& title, const string& author, const string& genre, int publishedYear) {
-        for (Book& book : books) {
-            if (book.getId() == id) {
-                book.setTitle(title);
-                book.setAuthor(author);
-                book.setGenre(genre);
-                book.setPublishedYear(publishedYear);
-                return;
-            }
-        }
-        cout << "Book with ID " << id << " not found." << endl;
-    }
+    def display(self):
+        print(f"ID: {self.id}, Title: {self.title}, Author: {self.author}, "
+              f"Genre: {self.genre}, Published Year: {self.published_year}")
 
-    void deleteBook(int id) {
-        for (auto it = books.begin(); it != books.end(); ++it) {
-            if (it->getId() == id) {
-                books.erase(it);
-                return;
-            }
-        }
-        cout << "Book with ID " << id << " not found." << endl;
-    }
 
-    void displayBooks() const {
-        for (const Book& book : books) {
-            book.display();
-        }
-    }
+class BookInventory:
+    def __init__(self):
+        self.books = []
+        self.next_id = 1
 
-    void displayBooksByAuthor(const string& author) const {
-        for (const Book& book : books) {
-            if (book.getAuthor() == author) {
-                book.display();
-            }
-        }
-    }
+    def add_book(self, title, author, genre, published_year):
+        self.books.append(Book(self.next_id, title, author, genre, published_year))
+        self.next_id += 1
 
-    void displayBooksByGenre(const string& genre) const {
-        for (const Book& book : books) {
-            if (book.getGenre() == genre) {
-                book.display();
-            }
-        }
-    }
+    def update_book(self, id, title, author, genre, published_year):
+        for book in self.books:
+            if book.get_id() == id:
+                book.set_title(title)
+                book.set_author(author)
+                book.set_genre(genre)
+                book.set_published_year(published_year)
+                return
+        print(f"Book with ID {id} not found.")
 
-    void displayBooksByYear(int year) const {
-        for (const Book& book : books) {
-            if (book.getPublishedYear() == year) {
-                book.display();
-            }
-        }
-    }
-};
+    def delete_book(self, id):
+        for book in self.books:
+            if book.get_id() == id:
+                self.books.remove(book)
+                return
+        print(f"Book with ID {id} not found.")
 
-int main() {
-    BookInventory inventory;
-    
-    inventory.addBook("The Great Gatsby", "F. Scott Fitzgerald", "Novel", 1925);
-    inventory.addBook("To Kill a Mockingbird", "Harper Lee", "Novel", 1960);
-    inventory.addBook("1984", "George Orwell", "Dystopian", 1949);
+    def display_books(self):
+        for book in self.books:
+            book.display()
 
-    cout << "All Books:" << endl;
-    inventory.displayBooks();
+    def display_books_by_author(self, author):
+        for book in self.books:
+            if book.get_author() == author:
+                book.display()
 
-    cout << "\nBooks by George Orwell:" << endl;
-    inventory.displayBooksByAuthor("George Orwell");
+    def display_books_by_genre(self, genre):
+        for book in self.books:
+            if book.get_genre() == genre:
+                book.display()
 
-    cout << "\nBooks in Novel genre:" << endl;
-    inventory.displayBooksByGenre("Novel");
+    def display_books_by_year(self, year):
+        for book in self.books:
+            if book.get_published_year() == year:
+                book.display()
 
-    cout << "\nBooks published in 1949:" << endl;
-    inventory.displayBooksByYear(1949);
 
-    inventory.updateBook(2, "To Kill a Mockingbird", "Harper Lee", "Classic", 1960);
-    cout << "\nUpdated Book with ID 2:" << endl;
-    inventory.displayBooks();
+def main():
+    inventory = BookInventory()
 
-    inventory.deleteBook(1);
-    cout << "\nBooks after deleting book with ID 1:" << endl;
-    inventory.displayBooks();
+    inventory.add_book("The Great Gatsby", "F. Scott Fitzgerald", "Novel", 1925)
+    inventory.add_book("To Kill a Mockingbird", "Harper Lee", "Novel", 1960)
+    inventory.add_book("1984", "George Orwell", "Dystopian", 1949)
 
-    return 0;
-}
+    print("All Books:")
+    inventory.display_books()
+
+    print("\nBooks by George Orwell:")
+    inventory.display_books_by_author("George Orwell")
+
+    print("\nBooks in Novel genre:")
+    inventory.display_books_by_genre("Novel")
+
+    print("\nBooks published in 1949:")
+    inventory.display_books_by_year(1949)
+
+    inventory.update_book(2, "To Kill a Mockingbird", "Harper Lee", "Classic", 1960)
+    print("\nUpdated Book with ID 2:")
+    inventory.display_books()
+
+    inventory.delete_book(1)
+    print("\nBooks after deleting book with ID 1:")
+    inventory.display_books()
+
+
+if __name__ == "__main__":
+    main()
